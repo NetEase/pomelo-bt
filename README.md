@@ -1,5 +1,7 @@
-#pomelo-bt
+#pomelo-bt - behavior tree for node.js
 pomelo-bt是pomelo项目中AI模块所依赖的行为树模块，提供了基本的行为树实现。
+
+Tags: node.js
 
 ##安装
 ```
