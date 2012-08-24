@@ -23,41 +23,41 @@ RES_SUCCESS, RES_FAIL, RES_WAIT分别代表当前执行成功，失败和仍在�
 ###Sequence
 实现行为树sequence语义。
 ####构造函数Sequenec(opts)
-+ opts.blackboard 构造行为树节点的blackboard实例。
++ opts.blackboard - 构造行为树节点的blackboard实例。
 
 ###Parallel
 实现行为树parallel语义。
 ####构造函数Parallel(opts)
-+ opts.blackboard 构造行为树节点的blackboard实例。
-+ opts.policy Parallel节点失败策略，可选值：Parallel.POLICY_FAIL_ON_ONE（默认值）, Parallel.POLICY_FAIL_ON_ALL。
++ opts.blackboard - 构造行为树节点的blackboard实例。
++ opts.policy - Parallel节点失败策略，可选值：Parallel.POLICY_FAIL_ON_ONE（默认值）, Parallel.POLICY_FAIL_ON_ALL。
 
 ###Selector
 实现行为树selector语义。
 ####构造函数Selector(opts)
-+ opts.blackboard 构造行为树节点的blackboard实例。
++ opts.blackboard - 构造行为树节点的blackboard实例。
 
 ##装饰节点
 ###Loop
 循环节点。
 ####构造函数Loop(opts)
-+ opts.blackboard 构造行为树节点的blackboard实例。
-+ opts.child 孩子节点。
-+ opts.loopCond(blackboard) 循环条件判断函数。返回true表示循环条件成立，否则不成立。
++ opts.blackboard - 构造行为树节点的blackboard实例。
++ opts.child - 孩子节点。
++ opts.loopCond(blackboard) - 循环条件判断函数。返回true表示循环条件成立，否则不成立。
 
 ##条件节点
 ###Condition
 条件成立返回RES_SUCCESS, 反之返回RES_FAIL。
 ####构造函数Condition(opts)
-+ opts.blackboard 构造行为树节点的blackboard实例。
-+ opts.cond(blackboard) 条件判断函数，返回true表示条件成立，否则不成立。
++ opts.blackboard - 构造行为树节点的blackboard实例。
++ opts.cond(blackboard) - 条件判断函数，返回true表示条件成立，否则不成立。
 
 ##其他节点
 ###If
 实现if语义，如果条件成立，则执行关联的孩子节点。
 ####构造函数If(opts)
-+ opts.blackboard 构造行为树节点的blackboard实例。
-+ opts.action 孩子节点。
-+ opts.cond(blackboard) 条件判断函数，返回true表示条件成立，否则不成立。
++ opts.blackboard - 构造行为树节点的blackboard实例。
++ opts.action - 孩子节点。
++ opts.cond(blackboard) - 条件判断函数，返回true表示条件成立，否则不成立。
 
 ##用法
 ``` javascript
