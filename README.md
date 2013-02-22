@@ -1,67 +1,74 @@
 #pomelo-bt - behavior tree for node.js
-pomelo-bt是pomelo项目中AI模块所依赖的行为树模块，提供了基本的行为树实现。
+
+pomelo-bt is a Behavior-Tree module for pomelo project to implement AI. More information about Behavior-Tree please refer other articles from Internet, such as [Understanding Behavior Trees](http://aigamedev.com/open/article/bt-overview/).
 
 + Tags: node.js
 
-##安装
+##Installation
 ```
 npm install pomelo-bt
 ```
 
-##行为树节点基类
-###节点基类 Node
-所有行为树节点都从该类派生，构造函数接受一个blackboard实例作为参数。
-每个节点都提供一个执行的入口doAction方法。doAction执行完完毕后，向父节点返回执行结果：
-RES_SUCCESS, RES_FAIL, RES_WAIT分别代表当前执行成功，失败和仍在执行中。
-父节点根据子节点的返回值再做后续流程决策。
+##Behavior tree nodes
 
-###组合节点基类 Composite
-所有组合节点都从该类派生，内部可以维护多个孩子节点。提供addChild接口，添加孩子节点。
+###Node
+The base class of all the behavior tree node classes. Its constructor receives a blackboard instance as parameter.
 
-###装饰节点基类 Decorator
-所有装饰节点都从该类派生，提供setChild接口，添加唯一的孩子节点。
+Each node class provides a `doAction` method to fire the behavior of current node instance. All the children should implement their own `doAction`. And the `doAction` method sould report a result code to the parent when it return. The result code is one of below:
 
-##组合节点
++ RES_SUCCESS: the behavior finished successfully.
++ RES_FAIL: the behavior fails.
++ RES_WAIT: the behavior is running and should be continued in next tick.
+The parent node makes its decision based on the result code.
+
+###Composite
+The base class of all the composite nodes. A composite node has arbitrary child nodes and it has a `addChild` method to add child node.
+
+###Decorator
+The base class of all the decorator nodes. A decorator node has the ability to decorate the result for its child node. A decorator node has only one child node and has a `setChild` method to set the child node.
+
+Followings are some behavior node types provided in `pomelo-bt`.
+
+##Composite nodes
 ###Sequence
-实现行为树sequence语义。
-####构造函数Sequenec(opts)
-+ opts.blackboard - 构造行为树节点的blackboard实例。
+Implementation of `sequence` semantics.
+####Sequence(opts)
++ opts.blackboard - blackboard instance for the behavior node.
 
 ###Parallel
-实现行为树parallel语义。
-####构造函数Parallel(opts)
-+ opts.blackboard - 构造行为树节点的blackboard实例。
-+ opts.policy - Parallel节点失败策略，可选值：Parallel.POLICY_FAIL_ON_ONE（默认值）, Parallel.POLICY_FAIL_ON_ALL。
+Implementation of parallel semantics.
+####Parallel(opts)
++ opts.blackboard - blackboard instance for the behavior node.
++ opts.policy - Failure strategy for Parallel node: `Parallel.POLICY_FAIL_ON_ONE`(default) return `RES_FAIL` if one child node fail, `Parallel.POLICY_FAIL_ON_ALL` return `RES_FAIL` only on all the child nodes fail.
 
 ###Selector
-实现行为树selector语义。
-####构造函数Selector(opts)
-+ opts.blackboard - 构造行为树节点的blackboard实例。
+Implementation of selector semantics.
+####Selector(opts)
++ opts.blackboard - blackboard instance for the behavior node.
 
-##装饰节点
+###Decorator nodes
 ###Loop
-循环节点。
-####构造函数Loop(opts)
-+ opts.blackboard - 构造行为树节点的blackboard实例。
-+ opts.child - 孩子节点。
-+ opts.loopCond(blackboard) - 循环条件判断函数。返回true表示循环条件成立，否则不成立。
+Implementation of loop semantics.
+####Loop(opts)
++ opts.blackboard - blackboard instance for the behavior node.
++ opts.child - child node for the decorator node。
++ opts.loopCond(blackboard) - loop condition function. return true to continue the loop and false to break the loop.
 
-##条件节点
 ###Condition
-条件成立返回RES_SUCCESS, 反之返回RES_FAIL。
-####构造函数Condition(opts)
-+ opts.blackboard - 构造行为树节点的blackboard实例。
-+ opts.cond(blackboard) - 条件判断函数，返回true表示条件成立，否则不成立。
+Return `RES_SUCESS` if the condition is true otherwise return `RES_FAIL`.
+####Condition(opts)
++ opts.blackboard - blackboard instance for the behavior node.
++ opts.cond(blackboard) - condition function, return true or false.
 
-##其他节点
+##Other nodes
 ###If
-实现if语义，如果条件成立，则执行关联的孩子节点。
-####构造函数If(opts)
-+ opts.blackboard - 构造行为树节点的blackboard实例。
-+ opts.action - 孩子节点。
-+ opts.cond(blackboard) - 条件判断函数，返回true表示条件成立，否则不成立。
+Implementation of loop semantics. If the condition is true, then fire the child node.
+####If(opts)
++ opts.blackboard - blackboard instance for the behavior node.
++ opts.action - child node.
++ opts.cond(blackboard) - condition function, return true or false.
 
-##用法
+##Usage
 ``` javascript
 var util = require('util');
 var bt = require('pomelo-bt');
@@ -102,4 +109,4 @@ seq.addChild(world);
 
 // run the behavior tree
 seq.doAction();
-``` 
+```
